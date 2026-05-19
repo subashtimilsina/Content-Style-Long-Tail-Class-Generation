@@ -54,23 +54,37 @@ For **Animal Faces**, the archive is extracted under `./Image/`. Use `dataset_to
 
 ### 2. Pack and imbalance the data
 
-**Pack images** into the training layout (folder or ZIP):
+Edit the paths in [`prepare_dataset.sh`](prepare_dataset.sh), then run:
+
+```bash
+bash prepare_dataset.sh
+```
+
+That script prepares each benchmark in **two steps**:
+
+**Step 1 — Pack images** (`dataset_tool.py`)
+
+Converts raw downloads into a StyleGAN2-ADA dataset folder (PNG layout + `dataset.json`).
 
 ```bash
 python dataset_tool.py --source=<raw_images> --dest=<output_dataset> \
   --transform=center-crop --width=128 --height=128
 ```
 
-**Create a long-tailed split** next to `dataset.json`. The imbalance factor `--imf` is the ratio of head-class to tail-class counts. `--shot-labels` also writes per-shot JSON files used by `fid_shots` / `kid_shots`.
+Use `--width=32 --height=32` for CIFAR. See `python dataset_tool.py --help` and [docs/dataset-tool-help.txt](docs/dataset-tool-help.txt).
+
+**Step 2 — Create a long-tailed split** (`lt_dataset.py`)
+
+Writes `lt_<imf>.json` beside `dataset.json`. `--imf` is the head-to-tail imbalance ratio; `--shot-labels` adds per-shot JSON files for `fid_shots` / `kid_shots`.
 
 ```bash
-python lt_dataset.py --fn <dataset_dir>/dataset.json --imf 25 \
+python lt_dataset.py --fn <output_dataset>/dataset.json --imf 25 \
   --shot-labels --dname animals
 ```
 
 Supported `--dname` values: `animals`, `flowers`, `cifar10`, `cifar100`, `lsun`, `afhq`.
 
-`prepare_dataset.sh` is an **example** batch script with machine-specific paths; copy it and set your data root before running.
+`prepare_dataset.sh` runs these commands for Animal Faces, Flowers-102, LSUN, CIFAR-10, and CIFAR-100 (with dataset-specific paths, resolutions, and `--imf` values). Run the steps individually if you only need one dataset.
 
 Point training at the dataset directory and the long-tail label file:
 
