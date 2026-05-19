@@ -1,6 +1,10 @@
 # Long-Tail Class Generation via Content-Style based Transfer Learning
 
-**Project page:** https://subashtimilsina.github.io/projects/longtail.html
+
+<p align="center">
+  <a href="https://subashtimilsina.github.io/projects/longtail.html"><b>Read More on Project (Project Page)</b></a>
+  &nbsp;·&nbsp;
+</p>
 
 ![Comparison](animalfaces_content_demo.jpg)
 
